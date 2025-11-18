@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Хто більше</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .scoreboard {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 20px;
+    }
+
+    .player {
+      background-color: #ffffffcc;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      width: 160px;
+    }
+
+    .player h2 {
+      margin: 0;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .circle {
+      margin: 15px auto;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #f1c40f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .points {
+      font-size: 16px;
+      color: #555;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #27ae60;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #34495e;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    let userWins = 0;
+    let compWins = 0;
+
+    const container = document.createElement("div");
+    container.className = "container";
+
+    const scoreboard = document.createElement("div");
+    scoreboard.className = "scoreboard";
+
+    const createPlayerBox = (label) => {
+      const box = document.createElement("div");
+      box.className = "player";
+
+      const title = document.createElement("h2");
+      title.textContent = label;
+
+      const circle = document.createElement("div");
+      circle.className = "circle";
+      circle.textContent = "-";
+
+      const points = document.createElement("div");
+      points.className = "points";
+      points.textContent = "points: 0";
+
+      box.appendChild(title);
+      box.appendChild(circle);
+      box.appendChild(points);
+
+      return { box, circle, points };
+    };
+
+    const user = createPlayerBox("Користувач");
+    const comp = createPlayerBox("Комп’ютер");
+
+    scoreboard.appendChild(user.box);
+    scoreboard.appendChild(comp.box);
+    container.appendChild(scoreboard);
+
+    const button = document.createElement("button");
+    button.textContent = "Генерувати";
+    container.appendChild(button);
+
+    const result = document.createElement("div");
+    result.className = "result";
+    container.appendChild(result);
+
+    document.body.appendChild(container);
+
+    button.addEventListener("click", () => {
+      if (userWins >= 3 || compWins >= 3) return;
+
+      const userNum = Math.floor(Math.random() * 10) + 1;
+      const compNum = Math.floor(Math.random() * 10) + 1;
+
+      user.circle.textContent = userNum;
+      comp.circle.textContent = compNum;
+
+      if (userNum > compNum) {
+        userWins++;
+        result.textContent = `поінт користувачу! (${userWins} : ${compWins})`;
+      } else if (compNum > userNum) {
+        compWins++;
+        result.textContent = `поінт комп’ютеру! (${userWins} : ${compWins})`;
+      } else {
+        result.textContent = `Нічия! (${userWins} : ${compWins})`;
+      }
+
+      user.points.textContent = `поінт: ${userWins}`;
+      comp.points.textContent = `поінт: ${compWins}`;
+
+      if (userWins === 3) {
+        result.textContent = "🎉 Користувач переміг!";
+        button.disabled = true;
+      } else if (compWins === 3) {
+        result.textContent = "🤖 Комп’ютер переміг!";
+        button.disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>
